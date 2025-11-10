@@ -121,8 +121,12 @@ class FilamentUsageTracker:
 
         if uri.scheme == "https" or uri.scheme == "http":
             return self._download_model(model_url)
-        elif uri.scheme == "file":
-            return self._retrieve_model_from_ftp(uri.path)
+        elif uri.scheme == "file" or uri.scheme == "ftp":
+            if uri.path:
+                path = uri.path
+            else:
+                path = uri.netloc
+            return self._retrieve_model_from_ftp(path)
         elif uri.scheme == "brtc":
             # For brtc://emmc/... URIs, netloc is "emmc" and path is the filename
             # We need to map emmc to cache/ on the FTP server
